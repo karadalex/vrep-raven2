@@ -1,7 +1,7 @@
 Raven 2 robot in V-REP
 ======================
 
-Simulation and control of Raven 2 robot in V-REP
+Simulation and control of Raven 2 surgical robot in V-REP.
 
 <p align="center">
     <img src="./screenshot.png">
