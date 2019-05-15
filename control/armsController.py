@@ -60,7 +60,8 @@ if __name__ == "__main__":
 
         # Send a command to move the Left arm of Raven2 robot
         homePosition = [0,0,0,0,0,0]
-        moveLeftArm([45*pi/180, -45*pi/180, -90*pi/180, 45*pi/180, 45*pi/180, 45*pi/180])
+        moveLeftArm([45*pi/180, -45*pi/180, -90*pi/180, 45*pi/180, 45*pi/180, -45*pi/180])
+        time.sleep(5)
         moveLeftArm(homePosition)
 
         # Before closing the connection to V-REP, make sure that the last command sent out had time to arrive. You can guarantee this with (for example):
