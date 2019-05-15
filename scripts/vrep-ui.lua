@@ -10,43 +10,41 @@
 
 function sysCall_init()
     xml = [[
-    <ui closeable="true" on-close="closeEventHandler" resizable="true">
+    <ui closeable="true" on-close="closeEventHandler" resizable="true" size="400,450" title="Raven 2 UI">
         <tabs>
             <tab title="Forward Kinematics">
                 <tabs>
                     <tab title="Left arm">
                         <group layout="vbox">
                             <label text="shoulder" />
-                            <hslider id="1001" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1001" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                             <label text="elbow" />
-                            <hslider id="1002" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1002" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                             <label text="insertion" />
-                            <hslider id="1003" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1003" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                             <label text="tool roll" />
-                            <hslider id="1004" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1004" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                             <label text="wrist joint" />
-                            <hslider id="1005" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1005" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                             <label text="grasper" />
-                            <hslider id="1006" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="1006" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
                         </group>
-                        <stretch />
                     </tab>
                     <tab title="Right arm">
                         <group layout="vbox">
                             <label text="shoulder" />
-                            <hslider id="2001" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2001" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                             <label text="elbow" />
-                            <hslider id="2002" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2002" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                             <label text="insertion" />
-                            <hslider id="2003" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2003" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                             <label text="tool roll" />
-                            <hslider id="2004" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2004" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                             <label text="wrist joint" />
-                            <hslider id="2005" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2005" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                             <label text="grasper" />
-                            <hslider id="2006" tick-position="below" tick-interval="500" minimum="0" maximum="90" on-change="onLeftArmJointsChange"/>
+                            <hslider id="2006" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
                         </group>
-                        <stretch />
                     </tab>
                 </tabs>
                 <stretch />
@@ -73,6 +71,20 @@ function sysCall_init()
 	  
    ui = simUI.create(xml)
    
+end
+
+function onLeftArmJointsChange(ui, id, newVal)
+    leftArmObjHandle = sim.getObjectHandle('base_link_L_visual')
+    leftArmScriptHandle = sim.getScriptAssociatedWithObject(leftArmObjHandle)
+    newPosition = {0,0,0,0,0,0}
+    for i = 1001,1006,1 do
+        newPosition[i-1000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandLeftArm@base_link_L_visual', leftArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
 end
 
 function sysCall_actuation()
