@@ -33,17 +33,17 @@ function sysCall_init()
                     <tab title="Right arm">
                         <group layout="vbox">
                             <label text="shoulder" />
-                            <hslider id="2001" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2001" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                             <label text="elbow" />
-                            <hslider id="2002" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2002" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                             <label text="insertion" />
-                            <hslider id="2003" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2003" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                             <label text="tool roll" />
-                            <hslider id="2004" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2004" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                             <label text="wrist joint" />
-                            <hslider id="2005" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2005" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                             <label text="grasper" />
-                            <hslider id="2006" tick-position="below" tick-interval="10" minimum="0" maximum="90"/>
+                            <hslider id="2006" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmJointsChange"/>
                         </group>
                     </tab>
                 </tabs>
@@ -83,6 +83,20 @@ function onLeftArmJointsChange(ui, id, newVal)
     print(newPosition)
 
     inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandLeftArm@base_link_L_visual', leftArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
+end
+
+function onRightArmJointsChange(ui, id, newVal)
+    rightArmObjHandle = sim.getObjectHandle('base_link_R_visual')
+    rightArmScriptHandle = sim.getScriptAssociatedWithObject(rightArmObjHandle)
+    newPosition = {0,0,0,0,0,0}
+    for i = 1001,1006,1 do
+        newPosition[i-1000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandRightArm@base_link_R_visual', rightArmScriptHandle, {}, newPosition, {}, {})
     print(inStrings[1])
     return
 end
