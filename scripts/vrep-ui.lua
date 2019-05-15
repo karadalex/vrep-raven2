@@ -8,6 +8,52 @@
 -- (the file can be opened in this editor with the popup menu over
 -- the file name)
 
+leftArmObjHandle = sim.getObjectHandle('base_link_L_visual')
+leftArmScriptHandle = sim.getScriptAssociatedWithObject(leftArmObjHandle)
+rightArmObjHandle = sim.getObjectHandle('base_link_R_visual')
+rightArmScriptHandle = sim.getScriptAssociatedWithObject(rightArmObjHandle)
+examplesObjHandle = sim.getObjectHandle('examples')
+examplesScriptHandle = sim.getScriptAssociatedWithObject(examplesObjHandle)
+
+
+function sleep(time)
+    local sec = tonumber(os.clock() + time);
+    while (os.clock() < sec) do
+    end
+    return
+end
+
+function onLeftArmJointsChange(ui, id, newVal)
+    newPosition = {0,0,0,0,0,0}
+    for i = 1001,1006,1 do
+        newPosition[i-1000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandLeftArm@base_link_L_visual', leftArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
+end
+
+function onRightArmJointsChange(ui, id, newVal)
+    newPosition = {0,0,0,0,0,0}
+    for i = 2001,2006,1 do
+        newPosition[i-2000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandRightArm@base_link_R_visual', rightArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
+end
+
+function runExample1(ui, id)
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('example1@examples', examplesScriptHandle, {}, {}, {}, {})
+    print(inStrings[1])
+    return
+end
+
+
 function sysCall_init()
     xml = [[
     <ui closeable="true" on-close="closeEventHandler" resizable="true" size="400,450" title="Raven 2 UI">
@@ -61,6 +107,21 @@ function sysCall_init()
 
             <tab title="Examples">
                 <group layout="vbox">
+                    <label text="Example 1" />
+                    <button text="Run" id="5001" on-click="runExample1" />
+                </group>
+                <stretch />
+            </tab>
+
+            <tab title="RemoteAPI">
+                <group layout="vbox">
+                        
+                </group>
+                <stretch />
+            </tab>
+
+            <tab title="ROS">
+                <group layout="vbox">
                         
                 </group>
                 <stretch />
@@ -71,34 +132,6 @@ function sysCall_init()
 	  
    ui = simUI.create(xml)
    
-end
-
-function onLeftArmJointsChange(ui, id, newVal)
-    leftArmObjHandle = sim.getObjectHandle('base_link_L_visual')
-    leftArmScriptHandle = sim.getScriptAssociatedWithObject(leftArmObjHandle)
-    newPosition = {0,0,0,0,0,0}
-    for i = 1001,1006,1 do
-        newPosition[i-1000] = simUI.getSliderValue(ui, i) * math.pi/180
-    end
-    print(newPosition)
-
-    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandLeftArm@base_link_L_visual', leftArmScriptHandle, {}, newPosition, {}, {})
-    print(inStrings[1])
-    return
-end
-
-function onRightArmJointsChange(ui, id, newVal)
-    rightArmObjHandle = sim.getObjectHandle('base_link_R_visual')
-    rightArmScriptHandle = sim.getScriptAssociatedWithObject(rightArmObjHandle)
-    newPosition = {0,0,0,0,0,0}
-    for i = 1001,1006,1 do
-        newPosition[i-1000] = simUI.getSliderValue(ui, i) * math.pi/180
-    end
-    print(newPosition)
-
-    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandRightArm@base_link_R_visual', rightArmScriptHandle, {}, newPosition, {}, {})
-    print(inStrings[1])
-    return
 end
 
 function sysCall_actuation()
