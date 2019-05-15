@@ -53,12 +53,37 @@ function runExample1(ui, id)
     return
 end
 
+function onLeftArmTargetPosChange(ui, id, newVal)
+    newPosition = {0,0,0,0,0,0}
+    for i = 3001,3006,1 do
+        newPosition[i-3000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandLeftDummyTarget@base_link_L_visual', leftArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
+end
+
+function onRightArmTargetPosChange(ui, id, newVal)
+    newPosition = {0,0,0,0,0,0}
+    for i = 4001,4006,1 do
+        newPosition[i-4000] = simUI.getSliderValue(ui, i) * math.pi/180
+    end
+    print(newPosition)
+
+    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('commandRightDummyTarget@base_link_R_visual', rightArmScriptHandle, {}, newPosition, {}, {})
+    print(inStrings[1])
+    return
+end
+
 
 function sysCall_init()
     xml = [[
     <ui closeable="true" on-close="closeEventHandler" resizable="true" size="400,450" title="Raven 2 UI">
         <tabs>
             <tab title="Forward Kinematics">
+                <label text="You must have IK groups disabled (Deselect from Inverse kinematics dialog)" />
                 <tabs>
                     <tab title="Left arm">
                         <group layout="vbox">
@@ -98,9 +123,41 @@ function sysCall_init()
 
 
             <tab title="Inverse Kinematics">
-                <group layout="vbox">
-                        
-                </group>
+                <label text="You must have IK groups enabled (Select from Inverse kinematics dialog)" />
+                <tabs>
+                    <tab title="Left arm">
+                        <group layout="vbox">
+                            <label text="X" />
+                            <hslider id="3001" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                            <label text="Y" />
+                            <hslider id="3002" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                            <label text="Z" />
+                            <hslider id="3003" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                            <label text="Yaw (alpha)" />
+                            <hslider id="3004" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                            <label text="Pitch (beta)" />
+                            <hslider id="3005" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                            <label text="Roll (gamma)" />
+                            <hslider id="3006" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onLeftArmTargetPosChange"/>
+                        </group>
+                    </tab>
+                    <tab title="Right arm">
+                        <group layout="vbox">
+                            <label text="X" />
+                            <hslider id="4001" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                            <label text="Y" />
+                            <hslider id="4002" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                            <label text="Z" />
+                            <hslider id="4003" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                            <label text="Yaw (alpha)" />
+                            <hslider id="4004" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                            <label text="Pitch (beta)" />
+                            <hslider id="4005" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                            <label text="Roll (gamma)" />
+                            <hslider id="4006" tick-position="below" tick-interval="10" minimum="0" maximum="90" on-change="onRightArmTargetPosChange"/>
+                        </group>
+                    </tab>
+                </tabs>
                 <stretch />
             </tab>
 

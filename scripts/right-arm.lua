@@ -12,6 +12,8 @@ function sysCall_threadmain()
     -- Put some initialization code here
     rightArmFlag = false
     targetPosition = {0,0,0,0,0,0}
+    rightDummyTargetFlag = false
+    rightDummyTargetPose = {0,0,0,0,0,0}
 
     commandRightArm = function(inInts,inFloats,inStrings,inBuffer)
         rightArmFlag = true
@@ -21,11 +23,20 @@ function sysCall_threadmain()
         return {},{},{'Robot received command'},'' -- return a string
     end
 
+    commandRightDummyTarget = function(inInts,inFloats,inStrings,inBuffer)
+        rightDummyTargetFlag = true
+        if #inFloats==6 then
+            rightDummyTargetPose = inFloats
+        end
+        return {},{},{'Robot received command'},'' -- return a string
+    end
+
     -- Put your main loop here, e.g.:
     --
     while sim.getSimulationState()~=sim.simulation_advancing_abouttostop do
         if rightArmFlag then
             moveRightArm(targetPosition)
+            moveRightTarget(rightDummyTargetPose)
         end
         sim.switchThread() -- resume in next simulation step
     end
@@ -81,6 +92,10 @@ function moveRightArm(targetPos)
     --     maxVel, maxAccel, maxJerk,
     --     homePosition, targetVel
     -- )
+end
+
+function moveRightTarget(x,y,z,alpha,beta,gamma)
+    -- TODO
 end
 
 
