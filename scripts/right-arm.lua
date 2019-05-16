@@ -49,13 +49,7 @@ end
 
 
 function moveRightArm(targetPos)
-    rightArmHandles = {-1,-1,-1,-1,-1,-1}
-    rightArmHandles[1] = sim.getObjectHandle('shoulder_R')
-    rightArmHandles[2] = sim.getObjectHandle('elbow_R')
-    rightArmHandles[3] = sim.getObjectHandle('insertion_R')
-    rightArmHandles[4] = sim.getObjectHandle('tool_roll_R')
-    rightArmHandles[5] = sim.getObjectHandle('wrist_joint_R')
-    rightArmHandles[6] = sim.getObjectHandle('grasper_joint_1_R')
+    rightArmHandles = sim.unpackTable(sim.getStringSignal("rightArmHandles"))
 
     -- Set-up some of the RML vectors:
     vel = 120
