@@ -16,10 +16,17 @@ function sysCall_threadmain()
     
     while sim.getSimulationState()~=sim.simulation_advancing_abouttostop do
         runExample1Flag = sim.getIntegerSignal("runExample1Flag")
+        runExample2Flag = sim.getIntegerSignal("runExample2Flag")
+
         if runExample1Flag == 1 then
             example1()
             runExample1Flag = 0
             sim.setIntegerSignal("runExample1Flag", runExample1Flag)
+        end
+        if runExample2Flag == 1 then
+            example2()
+            runExample2Flag = 0
+            sim.setIntegerSignal("runExample2Flag", runExample2Flag)
         end
         sim.switchThread() -- resume in next simulation step
     end
@@ -99,6 +106,25 @@ function example1()
         homePos, targetVel
     )
     return {},{},{'Example1 was executed'},'' -- return a string
+end
+
+--[[
+    Example 2:
+    Liver palpation with both arms
+    Command arms to follow the liverPalpationPath paths in task space
+    Documentation on sim.followPath http://www.coppeliarobotics.com/helpFiles/en/regularApi/simFollowPath.htm
+]]
+function example2()
+    leftToolDummyTarget = sim.getObjectHandle("left_tool_target")
+    rightToolDummyTarget = sim.getObjectHandle("right_tool_target")
+
+    liverPalpationPath1 = sim.getObjectHandle("liverPalpationPath1")
+    liverPalpationPath2 = sim.getObjectHandle("liverPalpationPath2")
+
+    vel = 2
+    accel = 1
+    sim.followPath(leftToolDummyTarget, liverPalpationPath1, 3, 0, vel, accel)
+    sim.followPath(rightToolDummyTarget, liverPalpationPath2, 3, 0, vel, accel)
 end
 
 -- ADDITIONAL DETAILS:

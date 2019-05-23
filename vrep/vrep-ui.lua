@@ -106,8 +106,15 @@ function sysCall_init()
 
             <tab title="Examples">
                 <group layout="vbox">
-                    <label text="Example 1" />
+                    <label text="<big>Example 1</big>" style="font-weight: bold;"/>
+                    <label text="Execute simple test paths in joint state for both arms" />
                     <button text="Run" id="5001" on-click="runExample1" />
+                </group>
+
+                <group layout="vbox">
+                    <label text="<big>Example 2</big>" style="font-weight: bold;"/>
+                    <label text="Liver palpation with both arms. Command arms to follow the liverPalpationPath paths in task space" />
+                    <button text="Run" id="5002" on-click="runExample2" />
                 </group>
                 <stretch />
             </tab>
@@ -190,12 +197,6 @@ function onRightArmJointsChange(ui, id, newVal)
     return
 end
 
-function runExample1(ui, id)
-    runExample1Flag = 1
-    sim.setIntegerSignal("runExample1Flag", runExample1Flag)
-    return
-end
-
 function onLeftArmTargetPosChange(ui, id, newVal)
     newPosition = {0,0,0}
     newOrientation = {0,0,0}
@@ -227,6 +228,18 @@ function onRightArmTargetPosChange(ui, id, newVal)
     sim.setObjectPosition(rightToolDummyTarget, -1, newPosition)
     sim.setObjectOrientation(rightToolDummyTarget, -1, newOrientation)
 
+    return
+end
+
+function runExample1(ui, id)
+    runExample1Flag = 1
+    sim.setIntegerSignal("runExample1Flag", runExample1Flag)
+    return
+end
+
+function runExample2(ui, id)
+    runExample2Flag = 1
+    sim.setIntegerSignal("runExample2Flag", runExample2Flag)
     return
 end
 
