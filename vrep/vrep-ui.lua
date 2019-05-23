@@ -140,8 +140,8 @@ function sysCall_init()
     end
     -- alpha, beta, gamma of left_tool_target dummy
     leftToolDummyTargetOrient = sim.getObjectOrientation(leftToolDummyTarget, -1)
-    for i=4,6,1 do
-        orientation = math.floor(leftToolDummyTargetOrient[i]*180/math.pi)
+    for i=1,3,1 do
+        orientation = math.floor(leftToolDummyTargetOrient[i])*180/math.pi
         simUI.setSliderValue(ui, 3000+i, orientation)
     end
 
@@ -152,8 +152,8 @@ function sysCall_init()
     end
     -- alpha, beta, gamma of right_tool_target dummy
     rightToolDummyTargetOrient = sim.getObjectOrientation(rightToolDummyTarget, -1)
-    for i=4,6,1 do
-        orientation = math.floor(rightToolDummyTargetOrient[i]*180/math.pi)
+    for i=1,3,1 do
+        orientation = math.floor(rightToolDummyTargetOrient[i])*180/math.pi
         simUI.setSliderValue(ui, 4000+i, orientation)
     end
    
@@ -191,8 +191,8 @@ function onRightArmJointsChange(ui, id, newVal)
 end
 
 function runExample1(ui, id)
-    inInts,inFloats,inStrings,inBuffer = sim.callScriptFunction('example1@examples', examplesScriptHandle, {}, {}, {}, {})
-    print(inStrings[1])
+    runExample1Flag = 1
+    sim.setIntegerSignal("runExample1Flag", runExample1Flag)
     return
 end
 
